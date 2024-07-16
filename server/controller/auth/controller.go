@@ -148,3 +148,9 @@ func Login() gin.HandlerFunc {
 
 	}
 }
+
+func Authenticate() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+	}
+}
