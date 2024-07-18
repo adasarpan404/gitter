@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/adasarpan404/gitter/helper"
@@ -151,6 +152,28 @@ func Login() gin.HandlerFunc {
 
 func Authenticate() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		bearerToken := c.Request.Header.Get("Authorization")
+		res := strings.Split(bearerToken, " ")
+		clientToken := res[1]
 
+		if clientToken == "" {
+			helper.ErrorResponse(c, http.StatusUnauthorized, "No Authorization Header Provided")
+			c.Abort()
+			return
+		}
+		claims, err := helper.ValidateToken(clientToken)
+
+		if err != "" {
+			helper.ErrorResponse(c, http.StatusBadRequest, err)
+
+			c.Abort()
+			return
+		}
+
+		c.Set("email", claims.Email)
+		c.Set("firstName", claims.FirstName)
+		c.Set("lastName", claims.LastName)
+		c.Set("userId", claims.ID)
+		c.Next()
 	}
 }
