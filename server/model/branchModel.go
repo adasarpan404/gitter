@@ -6,10 +6,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Repo struct {
+type Branch struct {
 	ID        primitive.ObjectID `bson:"_id"`
 	Name      *string            `bson:"name" validate:"required,min=2,max=100"`
-	User      primitive.ObjectID `bson:"user" `
+	Repo      primitive.ObjectID `bson:"repo"`
 	CreatedAt time.Time          `bson:"createdAt"`
-	UpdateAt  time.Time          `bson:"updatedAt"`
+	UpdatedAt time.Time          `bson:"updatedAt"`
 }
